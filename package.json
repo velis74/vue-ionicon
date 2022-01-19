@@ -1,0 +1,195 @@
+{
+  "name": "vue-ionicon",
+  "version": "1.0.0",
+  "description": "Caching asynchronous IonIcons loader for Vue",
+  "main": "ion-icon.vue",
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue ionicons",
+    "vue svg",
+    "ionicons"
+  ],
+  "author": "Jure Erznožnik",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/cli.git"
+  },
+  "dependencies": {
+    "axios": "^0.25.0",
+    "vue": "^2.6.14"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.5.15",
+    "@vue/cli-plugin-eslint": "^4.5.15",
+    "@vue/cli-service": "^4.5.15",
+    "@vue/eslint-config-airbnb": "^5.3.0",
+    "babel-eslint": "^10.1.0",
+    "cache-loader": "^4.1.0",
+    "eslint-plugin-es": "^4.1.0",
+    "eslint-plugin-vue": "^8.3.0",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^4.46.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "plugin:vue/strongly-recommended",
+      "plugin:vue/recommended",
+      "@vue/airbnb"
+    ],
+    "plugins": [
+      "es"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {
+      "max-len": [
+        "error",
+        {
+          "code": 120
+        }
+      ],
+      "no-console": 0,
+      "no-plusplus": "off",
+      "sort-imports": "off",
+      "import/extensions": [
+        "error",
+        "always",
+        {
+          "js": "never",
+          "vue": "never"
+        }
+      ],
+      "import/order": [
+        "error",
+        {
+          "newlines-between": "always",
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          }
+        }
+      ],
+      "indent": [
+        "error",
+        2,
+        {
+          "MemberExpression": 1
+        }
+      ],
+      "es/no-destructuring": "error",
+      "no-param-reassign": [
+        "error",
+        {
+          "props": false
+        }
+      ],
+      "prefer-destructuring": [
+        "warn",
+        {
+          "VariableDeclarator": {
+            "array": false,
+            "object": false
+          },
+          "AssignmentExpression": {
+            "array": false,
+            "object": false
+          }
+        },
+        {
+          "enforceForRenamedProperties": false
+        }
+      ],
+      "object-curly-newline": [
+        "error",
+        {
+          "multiline": true
+        }
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allowAfterThis": true
+        }
+      ],
+      "operator-linebreak": [
+        "error",
+        "after"
+      ],
+      "linebreak-style": [
+        "off"
+      ],
+      "vue/html-closing-bracket-spacing": [
+        "error",
+        {
+          "selfClosingTag": "never"
+        }
+      ],
+      "vue/no-v-html": [
+        "off"
+      ],
+      "vue/max-attributes-per-line": [
+        "warn",
+        {
+          "singleline": {
+            "max": 10
+          }
+        }
+      ],
+      "vue/singleline-html-element-content-newline": [
+        "off"
+      ]
+    }
+  },
+  "babel": {
+    "presets": [
+      "@vue/cli-plugin-babel/preset"
+    ]
+  },
+  "vue": {
+    "outputDir": "dist/",
+    "css": {
+      "extract": {
+        "ignoreOrder": true,
+        "filename": "css/vue-ionicon.css",
+        "chunkFilename": "css/vue-ionicon-vendor.css"
+      }
+    },
+    "configureWebpack": {
+      "entry": {
+        "app": "./index.js"
+      },
+      "resolve": {
+        "alias": {},
+        "extensions": [
+          ".js",
+          ".vue",
+          ".json"
+        ]
+      },
+      "devServer": {
+        "proxy": {
+          ".*": {
+            "target": "http://localhost:8000",
+            "secure": false
+          }
+        }
+      },
+      "output": {
+        "filename": "js/vue-ionicon.js",
+        "chunkFilename": "js/vue-ionicon-vendors.js"
+      }
+    }
+  }
+}
