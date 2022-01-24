@@ -1,15 +1,22 @@
 <template>
-  <div v-if="loaded_svg" :key="loaded_svg" v-html="loaded_svg"/>
+  <div v-if="loaded_svg" :key="loaded_svg" class="ionicon-wrapper" v-html="loaded_svg"/>
 </template>
 
 <script>
 import axios from 'axios';
+import DOMPurify from 'dompurify';
 
 export default {
   name: 'IonIcon',
   props: { name: { type: String, required: false, default: null } },
+  emits: ['icon-loaded'],
   data() {
     return { loaded_svg: '' };
+  },
+  computed: {
+    repo_url() {
+      return `https://unpkg.com/ionicons@5.5.1/dist/svg/${this.name}.svg`;
+    },
   },
   watch: {
     name() {
@@ -17,37 +24,71 @@ export default {
       this.loadSVG();
     },
   },
+  created() {
+    if (!window.ionicon_cache) window.ionicon_cache = {};
+  },
   mounted() {
     this.loadSVG();
   },
   methods: {
-    loadSVG() {
+    getCache() { return window.ionicon_cache[this.name]; },
+    setCache(value) {
+      window.ionicon_cache[this.name] = value;
+      return value;
+    },
+    sanitize(svg) {
+      // remove the title attribute because it's messing with selenium getting element text (title is included)
+      // this makes getting button text much harder, especially because this icon is lazy-loading
+      let result = svg.replace(/<title>.*<\/title>/i, '');
+      if (!result.includes('currentColor')) {
+        // The provided icon doesn't specify its colours as currentColor. Let's try to assign them. Of course,
+        // this will have zero effect if the svg actually defines its colours otherwise, e.g. by specifying fill="black"
+        result = result.replace(/(<svg)(\s)(.*)/i, '$1 fill="currentColor" stroke="currentColor" $3');
+      }
+      result = DOMPurify.sanitize(result, { USE_PROFILES: { svg: true } });
+      return result;
+    },
+    setLoadedSVG(svg) {
+      this.loaded_svg = svg;
+      this.$emit('icon-loaded', true);
+    },
+    async loadSVG() {
       const name = this.name;
-      if (!window.cache_ionicon) { window.cache_ionicon = {}; }
-      if (!name) ;
-      else if (window.cache_ionicon[name]) {
-        if (typeof window.cache_ionicon[name].then === 'function') {
-          window.cache_ionicon[name].then((res) => { this.loaded_svg = res.data.replace(/<title>.*<\/title>/i, ''); });
-          this.loaded_svg = '&hellip;';
-          return;
+
+      if (!name) return; // Name is not defined, so don't render anything
+      const cache = this.getCache();
+      this.loaded_svg = '&hellip;'; // ellipsis while we're loading
+      if (cache) {
+        // icon is already in cache or at least there's a promise there
+        if (typeof cache.then === 'function') {
+          // there's a promise there
+          try {
+            const res = await cache;
+            this.setLoadedSVG(this.sanitize(res.data));
+          } catch { console.error('Failed waiting for an existing axios request to finish'); }
+        } else {
+          this.setLoadedSVG(cache); // icon is already in cache
         }
-        this.loaded_svg = window.cache_ionicon[name];
+      } else if (name.toLowerCase().includes('<svg')) {
+        this.setLoadedSVG(this.sanitize(name));
       } else {
-        this.loaded_svg = '&hellip;';
         // if icon name contains a '/' character, we assume it's a local resource, otherwise an ion icon
-        const url = name.indexOf('/') > -1 ? name : `https://unpkg.com/ionicons@5.5.1/dist/svg/${name}.svg`;
-        window.cache_ionicon[name] = axios.get(url);
-        window.cache_ionicon[name].then((res) => {
-          // remove the title attribute because it's messing with selenium getting element text (title is included)
-          // this makes getting button text much harder, especially because this icon is lazy-loading
-          // eslint-disable-next-line no-multi-assign
-          this.loaded_svg = window.cache_ionicon[name] = res.data.replace(/<title>.*<\/title>/i, '');
-        });
+        const url = name.indexOf('/') > -1 ? name : this.repo_url;
+        try {
+          const res = await this.setCache(axios.get(url)); // first we set cache to axios promise
+          this.setLoadedSVG(this.setCache(this.sanitize(res.data))); // then to sanitized svg
+        } catch { console.error('Failed loading IonIcon. Wrong icon name or URL?'); }
       }
     },
   },
 };
 </script>
+
+<style scoped>
+.ionicon-wrapper {
+  display: inline-block;
+}
+</style>
 
 <style>
 /* this selector is actually used within the SVG returned from the server */

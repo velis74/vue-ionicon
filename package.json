@@ -2,39 +2,77 @@
   "name": "vue-ionicon",
   "version": "1.0.0",
   "description": "Caching asynchronous IonIcons loader for Vue",
-  "main": "ion-icon.vue",
+  "author": "Jure Erznožnik",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
   },
-  "keywords": [
-    "vue ionicons",
-    "vue svg",
-    "ionicons"
+  "main": "ion-icon.vue",
+  "files": [
+    "ion-icon.vue"
   ],
-  "author": "Jure Erznožnik",
-  "license": "BSD-3-Clause",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/npm/cli.git"
-  },
   "dependencies": {
     "axios": "^0.25.0",
+    "dompurify": "^2.3.4",
     "vue": "^2.6.14"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-eslint": "^4.5.15",
+    "@vue/cli-plugin-unit-jest": "~4.5.0",
     "@vue/cli-service": "^4.5.15",
     "@vue/eslint-config-airbnb": "^5.3.0",
+    "@vue/test-utils": "^1.3.0",
     "babel-eslint": "^10.1.0",
     "cache-loader": "^4.1.0",
+    "eslint": "^6.8.0",
     "eslint-plugin-es": "^4.1.0",
     "eslint-plugin-vue": "^8.3.0",
+    "flush-promises": "^1.0.2",
+    "vue-jest": "^3.0.7",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^4.46.0"
+  },
+  "vue": {
+    "outputDir": "dist/",
+    "css": {
+      "extract": {
+        "ignoreOrder": true,
+        "filename": "css/vue-ionicon.css",
+        "chunkFilename": "css/vue-ionicon-vendor.css"
+      }
+    },
+    "configureWebpack": {
+      "entry": {
+        "app": "./index.js"
+      },
+      "resolve": {
+        "extensions": [
+          ".js",
+          ".vue",
+          ".json"
+        ]
+      },
+      "devServer": {
+        "proxy": {
+          ".*": {
+            "target": "http://localhost:8000",
+            "secure": false
+          }
+        }
+      },
+      "output": {
+        "filename": "js/vue-ionicon.js",
+        "chunkFilename": "js/vue-ionicon-vendors.js"
+      }
+    }
+  },
+  "babel": {
+    "presets": [
+      "@vue/cli-plugin-babel/preset"
+    ]
   },
   "eslintConfig": {
     "root": true,
@@ -150,46 +188,47 @@
       "vue/singleline-html-element-content-newline": [
         "off"
       ]
-    }
-  },
-  "babel": {
-    "presets": [
-      "@vue/cli-plugin-babel/preset"
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.spec.{j,t}s?(x)"
+        ],
+        "env": {
+          "jest": true
+        }
+      }
     ]
   },
-  "vue": {
-    "outputDir": "dist/",
-    "css": {
-      "extract": {
-        "ignoreOrder": true,
-        "filename": "css/vue-ionicon.css",
-        "chunkFilename": "css/vue-ionicon-vendor.css"
-      }
+  "jest": {
+    "preset": "@vue/cli-plugin-unit-jest",
+    "testMatch": [
+      "**/*.spec.[jt]s?(x)"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "vue"
+    ],
+    "transform": {
+      ".*\\.(vue)$": "vue-jest"
     },
-    "configureWebpack": {
-      "entry": {
-        "app": "./index.js"
-      },
-      "resolve": {
-        "alias": {},
-        "extensions": [
-          ".js",
-          ".vue",
-          ".json"
-        ]
-      },
-      "devServer": {
-        "proxy": {
-          ".*": {
-            "target": "http://localhost:8000",
-            "secure": false
-          }
-        }
-      },
-      "output": {
-        "filename": "js/vue-ionicon.js",
-        "chunkFilename": "js/vue-ionicon-vendors.js"
-      }
-    }
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,vue}",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!index.*"
+    ]
+  },
+  "keywords": [
+    "vue ionicons",
+    "vue svg",
+    "ionicons"
+  ],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/npm/cli.git"
   }
 }
