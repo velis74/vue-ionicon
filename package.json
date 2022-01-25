@@ -13,6 +13,16 @@
   "files": [
     "ion-icon.vue"
   ],
+  "keywords": [
+    "vue ionicons",
+    "vue svg",
+    "ionicons"
+  ],
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:velis74/vue-ionicon.git"
+  },
   "dependencies": {
     "axios": "^0.25.0",
     "dompurify": "^2.3.4",
@@ -220,15 +230,5 @@
       "!**/coverage/**",
       "!index.*"
     ]
-  },
-  "keywords": [
-    "vue ionicons",
-    "vue svg",
-    "ionicons"
-  ],
-  "license": "BSD-3-Clause",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/npm/cli.git"
   }
 }

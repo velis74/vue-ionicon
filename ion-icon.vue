@@ -43,7 +43,7 @@ export default {
       if (!result.includes('currentColor')) {
         // The provided icon doesn't specify its colours as currentColor. Let's try to assign them. Of course,
         // this will have zero effect if the svg actually defines its colours otherwise, e.g. by specifying fill="black"
-        result = result.replace(/(<svg)(\s)(.*)/i, '$1 fill="currentColor" stroke="currentColor" $3');
+        result = result.replace(/(<svg)(\s)(.*)/i, '$1 fill="currentColor" $3');
       }
       result = DOMPurify.sanitize(result, { USE_PROFILES: { svg: true } });
       return result;
@@ -83,18 +83,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.ionicon-wrapper {
-  display: inline-block;
-}
-</style>
-
-<style>
-/* this selector is actually used within the SVG returned from the server */
-/*noinspection CssUnusedSymbol,SpellCheckingInspection*/
-.ionicon {
-  display: inline-block;
-  height:  1.5em;
-}
-</style>

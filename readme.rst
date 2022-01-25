@@ -11,7 +11,7 @@ https://www.velis.si/ion-icon/
 Features
 --------
 
-* Renders santized SVG
+* Renders sanitised SVG
 * Loads from Ionicons CDN, any local URL, any full URL or SVG literal
 * Caches loaded icons, there will be only one HTTP request per icon
 * Applies currentColor to icons: if colour is not otherwise specified, icons will have same color as HTML text
