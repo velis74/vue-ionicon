@@ -77,7 +77,7 @@ export default {
       <rect x="0" y="0" width="298" height="$y1"/>
     </clipPath>
     <clipPath id="d-puscica-gor">
-      <rect x="0" y="$0" width="298" height="$y2"/>
+      <rect x="0" y="0" width="298" height="$y2"/>
     </clipPath>
   </defs>
   <g opacity=".81">
