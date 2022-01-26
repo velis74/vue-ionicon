@@ -118,6 +118,6 @@ describe('IonIcon', () => {
       },
     });
     await flushPromises();
-    expect(icon1.html()).toContain('#facc21');
+    expect(icon1.html()).toContain('puscica');
   });
 });
