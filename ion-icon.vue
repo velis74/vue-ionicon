@@ -6,6 +6,15 @@
 import axios from 'axios';
 import DOMPurify from 'dompurify';
 
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href').match(/^#/)) {
+    node.remove();
+  }
+  if (node.hasAttribute('href') && !node.getAttribute('href').match(/^#/)) {
+    node.remove();
+  }
+});
+
 export default {
   name: 'IonIcon',
   props: { name: { type: String, required: false, default: null } },
@@ -45,7 +54,9 @@ export default {
         // this will have zero effect if the svg actually defines its colours otherwise, e.g. by specifying fill="black"
         result = result.replace(/(<svg)(\s)(.*)/i, '$1 fill="currentColor" $3');
       }
-      result = DOMPurify.sanitize(result, { USE_PROFILES: { svg: true } });
+      result = DOMPurify.sanitize(
+        result, { USE_PROFILES: { svg: true }, ADD_TAGS: ['use'] },
+      );
       return result;
     },
     setLoadedSVG(svg) {
