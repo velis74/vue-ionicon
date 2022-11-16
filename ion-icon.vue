@@ -2,9 +2,10 @@
   <div v-if="loaded_svg" :key="loaded_svg" class="ionicon-wrapper" v-html="loaded_svg"/>
 </template>
 
-<script>
+<script lang="ts">
 import axios from 'axios';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
+import { defineComponent } from 'vue';
 
 DOMPurify.addHook('afterSanitizeAttributes', (node) => {
   if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href').match(/^#/)) {
@@ -15,7 +16,7 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
   }
 });
 
-export default {
+export default defineComponent({
   name: 'IonIcon',
   props: { name: { type: String, required: false, default: null } },
   emits: ['icon-loaded'],
@@ -92,5 +93,5 @@ export default {
       }
     },
   },
-};
+});
 </script>
