@@ -44,5 +44,15 @@
     "typescript": "^4.7.4",
     "vite-plugin-eslint": "^1.8.1",
     "vitest": "^0.25.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "velis",
+      "@vue/eslint-config-typescript"
+    ],
+    "rules": {
+      "import/extensions": "off"
+    }
   }
 }

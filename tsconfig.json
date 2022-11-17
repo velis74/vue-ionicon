@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
-    "typeRoots": ["./types"],
+    "typeRoots": [
+      "./types"
+    ],
     "allowSyntheticDefaultImports": true
   }
 }

@@ -102,8 +102,8 @@ export default defineComponent({
   computed: {
     literalSvgAnimated() {
       return this.literalSvg
-          .replace(/\$y1/g, this.literalSvgOffset)
-          .replace(/\$y2/g, String(187 - this.literalSvgOffset));
+        .replace(/\$y1/g, this.literalSvgOffset)
+        .replace(/\$y2/g, String(187 - this.literalSvgOffset));
     },
   },
   mounted() {
