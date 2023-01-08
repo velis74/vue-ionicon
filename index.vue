@@ -47,10 +47,12 @@
     </p>
   </div>
 </template>
-<script>
-import IonIcon from './ion-icon';
+<script lang="ts">
+import { defineComponent } from 'vue';
 
-export default {
+import IonIcon from './ion-icon.vue';
+
+export default defineComponent({
   name: 'DemoApp',
   components: { IonIcon },
   data() {
@@ -101,13 +103,13 @@ export default {
     literalSvgAnimated() {
       return this.literalSvg
         .replace(/\$y1/g, this.literalSvgOffset)
-        .replace(/\$y2/g, 187 - this.literalSvgOffset);
+        .replace(/\$y2/g, String(187 - this.literalSvgOffset));
     },
   },
   mounted() {
     window.setInterval(() => { this.literalSvgOffset = (this.literalSvgOffset + 3) % 187; }, 10);
   },
-};
+});
 </script>
 <style>
 .ionicon-wrapper {
