@@ -1,31 +1,30 @@
-import { shallowMount } from '@vue/test-utils';
-// @ts-ignore
-import flushPromises from 'flush-promises';
-import { vi, describe, it, expect } from 'vitest';
+import { shallowMount, flushPromises } from '@vue/test-utils';
+import { vi } from 'vitest'; // the rest are handled by globals: true and @types/jest dependency
 
-import IonIcon from './ion-icon.vue';
+import IonIcon, { clearIoniconCache } from './ion-icon.vue';
 
 let requestsCount = 0;
 
 vi.mock('axios', () => ({
   default: {
-    get: async (url) => {
+    get: async (url: string) => {
       requestsCount += 1;
       if (url.includes('failure')) throw new Error('bad url');
+      if (url.includes('test.svg')) return { data: '<svg id="kladivo"></svg>' };
       return {
         data: '<svg xmlns="http://www.w3.org/2000/svg" class="ionicon" ' +
-            'viewBox="0 0 512 512"><title>Warning</title><path d="M449.07 399.08L278.64 82.58c-12.08-22.44-44.26-22.44' +
-            '-56.35 0L51.87 399.08A32 32 0 0080 446.25h340.89a32 32 0 0028.18-47.17zm-198.6-1.83a20 20 0 1120-20 20 20' +
-            ' 0 01-20 20zm21.72-201.15l-5.74 122a16 16 0 01-32 0l-5.74-121.95a21.73 21.73 0 0121.5-22.69h.21a21.74 21.74' +
-            ' 0 0121.73 22.7z"/></svg>',
+            'viewBox="0 0 512 512"><title>Warning</title><path d="M449.07 399.08L278.64 82.58c-12.08-22.44-44.26-' +
+            '22.44-56.35 0L51.87 399.08A32 32 0 0080 446.25h340.89a32 32 0 0028.18-47.17zm-198.6-1.83a20 20 0 1120-20' +
+            ' 20 20 0 01-20 20zm21.72-201.15l-5.74 122a16 16 0 01-32 0l-5.74-121.95a21.73 21.73 0 0121.5-22.69h.21' +
+            'a21.74 21.74 0 0121.73 22.7z"/></svg>',
       };
     },
-  }
+  },
 }));
 
 describe('IonIcon', () => {
   it('renders for icon and doesn\'t render when name is null', async () => {
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     expect(icon1.html()).toContain('div');
@@ -33,7 +32,7 @@ describe('IonIcon', () => {
     expect(icon1.html()).toMatch('');
   });
   it('emits event when rendered and there\'s a SVG in the DOM', async () => {
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     // await icon1.vm.$nextTick();
@@ -41,13 +40,13 @@ describe('IonIcon', () => {
     expect(icon1.html()).toContain('svg');
   });
   it('loads the mocked SVG, not the actual requested SVG', async () => {
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     expect(icon1.html()).toContain('340.89'); // mocked svg contains this value
   });
   it('fails loading icon and remains in ellipsis state', async () => {
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const iconFailed1 = shallowMount(IonIcon, { propsData: { name: 'failure' } });
     const iconFailed2 = shallowMount(IonIcon, { propsData: { name: 'failure' } });
     await flushPromises();
@@ -56,7 +55,7 @@ describe('IonIcon', () => {
   });
   it('loads two SVGs, but only makes one request', async () => {
     const rc = requestsCount;
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     const icon2 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
@@ -66,7 +65,7 @@ describe('IonIcon', () => {
   });
   it('loads two SVGs one after the other, loading the other from cache without promises', async () => {
     const rc = requestsCount;
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     expect(icon1.html()).toContain('340.89'); // mocked svg contains this value
@@ -76,7 +75,7 @@ describe('IonIcon', () => {
     expect(requestsCount).toEqual(rc + 1);
   });
   it('loads svg from literal string', async () => {
-    window.ionicon_cache = {}; // Clear IonIcon cache
+    clearIoniconCache();
     const icon1 = shallowMount(IonIcon, {
       propsData: {
         name: `
@@ -123,5 +122,11 @@ describe('IonIcon', () => {
     });
     await flushPromises();
     expect(icon1.html()).toContain('puscica');
+  });
+  it('loads svg from local server resource', async () => {
+    clearIoniconCache();
+    const icon1 = shallowMount(IonIcon, { propsData: { name: '/test.svg' } });
+    await flushPromises();
+    expect(icon1.html()).toContain('kladivo');
   });
 });

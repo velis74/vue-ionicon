@@ -4,8 +4,8 @@
       This small demo shows how the component works
     </p>
     <p>
-      Icon to load:
-      <select v-model="icon">
+      <label for="#icon-selector">Icon to load:</label>
+      <select id="icon-selector" v-model="icon">
         <option selected>warning</option>
         <option>chatbox-ellipses-outline</option>
         <option>cog-outline</option>
