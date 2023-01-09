@@ -3,9 +3,10 @@
   "version": "2.0.0",
   "description": "Caching asynchronous IonIcons loader for Vue",
   "author": "Jure Erznožnik",
+  "vue-ionicon": "vue-ionicon-0.0.0.tgz",
   "scripts": {
     "serve": "vite",
-    "build": "vite build",
+    "build": "vite build && vue-tsc --emitDeclarationOnly && mv dist/src dist/types",
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
@@ -45,6 +46,7 @@
     "vite-plugin-eslint": "^1.8.1",
     "vitest": "^0.25.1"
   },
+  "types": "./dist/types/index.d.ts",
   "eslintConfig": {
     "extends": [
       "plugin:vue/vue3-essential",
