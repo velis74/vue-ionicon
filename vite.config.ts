@@ -28,7 +28,7 @@ export default defineConfig({
   },
   build: {
     lib: {
-      entry: resolve(__dirname, 'index.ts'),
+      entry: resolve(__dirname, 'ion-icon.vue'),
       fileName: 'ion-icon.ts',
       name: 'ion-icon',
     },
