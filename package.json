@@ -1,6 +1,6 @@
 {
   "name": "vue-ionicon",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Caching asynchronous IonIcons loader for Vue",
   "author": "Jure Erznožnik",
   "scripts": {
@@ -49,11 +49,18 @@
     "vue-tsc": "^1.0.24"
   },
   "eslintConfig": {
-    "extends": ["velis"],
+    "extends": [
+      "velis"
+    ],
     "parserOptions": {
       "project": "./tsconfig.eslint.json",
-      "extraFileExtensions": [".vue"]
+      "extraFileExtensions": [
+        ".vue"
+      ]
     },
-    "ignorePatterns": ["dist/*", "coverage/*"]
+    "ignorePatterns": [
+      "dist/*",
+      "coverage/*"
+    ]
   }
 }
