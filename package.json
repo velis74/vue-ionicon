@@ -5,7 +5,7 @@
   "author": "Jure Erznožnik",
   "scripts": {
     "serve": "vite",
-    "build": "vite build && vue-tsc --emitDeclarationOnly && rm dist/*.mjs",
+    "build": "vite build && vue-tsc --emitDeclarationOnly",
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
