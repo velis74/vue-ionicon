@@ -27,14 +27,15 @@ export default defineConfig({
     },
   },
   build: {
+    target: 'es2015',
     lib: {
       entry: resolve(__dirname, 'ion-icon.vue'),
       fileName: 'ion-icon.ts',
       name: 'ion-icon',
     },
     rollupOptions: {
-      external: ['vue'],
-      output: { globals: { vue: 'Vue' } },
+      external: ['vue', 'axios', 'isomorphic-dompurify'],
+      output: { globals: { vue: 'Vue', axios: 'axios', 'isomorphic-dompurify': 'isomorphic-dompurify' } },
     },
   },
   test: {

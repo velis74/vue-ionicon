@@ -7,17 +7,7 @@ import axios from 'axios';
 import DOMPurify from 'isomorphic-dompurify';
 import { defineComponent } from 'vue';
 
-type ResolvedIconGetResponse = { data: string };
-type IconGetResponse = Promise<{ data: string }>;
-type IconDefOrPromise = string | IconGetResponse;
-
-const ioniconCache: { [key: string]: IconDefOrPromise } = {};
-
-export function clearIoniconCache() {
-  for (const prop of Object.getOwnPropertyNames(ioniconCache)) {
-    delete ioniconCache[prop];
-  }
-}
+import ionIconCache, { IconDefOrPromise, IconGetResponse, ResolvedIconGetResponse } from './ion-icon-cache';
 
 DOMPurify.addHook('afterSanitizeAttributes', (node) => {
   if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href')?.match(/^#/)) {
@@ -53,9 +43,9 @@ export default /* #__PURE__ */ defineComponent({
     this.loadSVG();
   },
   methods: {
-    getCache() { return ioniconCache[this.name]; },
+    getCache() { return ionIconCache.get(this.name); },
     setCache(value: IconDefOrPromise) {
-      ioniconCache[this.name] = value;
+      ionIconCache.set(this.name, value);
       return value;
     },
     sanitize(svg: string): string {

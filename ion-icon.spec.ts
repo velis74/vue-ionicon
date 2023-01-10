@@ -1,7 +1,8 @@
 import { shallowMount, flushPromises } from '@vue/test-utils';
 import { vi } from 'vitest'; // the rest are handled by globals: true and @types/jest dependency
 
-import IonIcon, { clearIoniconCache } from './ion-icon.vue';
+import ionIconCache from './ion-icon-cache';
+import IonIcon from './ion-icon.vue';
 
 let requestsCount = 0;
 
@@ -24,7 +25,7 @@ vi.mock('axios', () => ({
 
 describe('IonIcon', () => {
   it('renders for icon and doesn\'t render when name is null', async () => {
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     expect(icon1.html()).toContain('div');
@@ -32,7 +33,7 @@ describe('IonIcon', () => {
     expect(icon1.html()).toMatch('');
   });
   it('emits event when rendered and there\'s a SVG in the DOM', async () => {
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     // await icon1.vm.$nextTick();
@@ -40,13 +41,13 @@ describe('IonIcon', () => {
     expect(icon1.html()).toContain('svg');
   });
   it('loads the mocked SVG, not the actual requested SVG', async () => {
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     expect(icon1.html()).toContain('340.89'); // mocked svg contains this value
   });
   it('fails loading icon and remains in ellipsis state', async () => {
-    clearIoniconCache();
+    ionIconCache.clear();
     const iconFailed1 = shallowMount(IonIcon, { propsData: { name: 'failure' } });
     const iconFailed2 = shallowMount(IonIcon, { propsData: { name: 'failure' } });
     await flushPromises();
@@ -55,7 +56,7 @@ describe('IonIcon', () => {
   });
   it('loads two SVGs, but only makes one request', async () => {
     const rc = requestsCount;
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     const icon2 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
@@ -65,7 +66,7 @@ describe('IonIcon', () => {
   });
   it('loads two SVGs one after the other, loading the other from cache without promises', async () => {
     const rc = requestsCount;
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, { propsData: { name: 'accessibility-outline' } });
     await flushPromises();
     expect(icon1.html()).toContain('340.89'); // mocked svg contains this value
@@ -75,7 +76,7 @@ describe('IonIcon', () => {
     expect(requestsCount).toEqual(rc + 1);
   });
   it('loads svg from literal string', async () => {
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, {
       propsData: {
         name: `
@@ -124,7 +125,7 @@ describe('IonIcon', () => {
     expect(icon1.html()).toContain('puscica');
   });
   it('loads svg from local server resource', async () => {
-    clearIoniconCache();
+    ionIconCache.clear();
     const icon1 = shallowMount(IonIcon, { propsData: { name: '/test.svg' } });
     await flushPromises();
     expect(icon1.html()).toContain('kladivo');
