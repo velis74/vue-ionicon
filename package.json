@@ -5,11 +5,11 @@
   "author": "Jure Erznožnik",
   "scripts": {
     "serve": "vite",
-    "build": "vite build && vue-tsc --emitDeclarationOnly && rm dist/*umd.js",
+    "build": "vite build && vue-tsc --emitDeclarationOnly && rm dist/*.mjs",
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
-  "main": "dist/ion-icon.ts.mjs",
+  "main": "dist/ion-icon.ts.umd.js",
   "types": "dist/ion-icon.vue.d.ts",
   "files": [
     "dist/*"
