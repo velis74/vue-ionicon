@@ -1,4 +1,5 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["ion-icon.vue", "index.*"]
+  "include": ["ion-icon.*", "index.*", "vite.config.ts"],
+  "exclude": ["dist", "coverage"]
 }

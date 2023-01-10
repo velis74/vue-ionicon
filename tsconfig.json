@@ -4,5 +4,6 @@
     "declaration": true,
     "outDir": "dist"
   },
-  "include": ["ion-icon.vue"]
+  "include": ["ion-icon.vue"],
+  "exclude": ["dist", "coverage"]
 }
