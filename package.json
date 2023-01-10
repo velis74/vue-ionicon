@@ -9,7 +9,7 @@
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
-  "main": "dist/ion-icon.vue",
+  "main": "dist/ion-icon.ts.mjs",
   "types": "dist/ion-icon.vue.d.ts",
   "files": [
     "dist/*"
