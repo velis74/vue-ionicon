@@ -1,3 +1,8 @@
 {
-  "extends": "./node_modules/eslint-config-velis/tsconfig.json"
+  "extends": "./node_modules/eslint-config-velis/tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "include": ["ion-icon.vue"]
 }

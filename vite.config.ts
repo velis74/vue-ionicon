@@ -1,3 +1,4 @@
+/// <reference types="vitest" />
 import { resolve } from 'path';
 
 import vue from '@vitejs/plugin-vue';
@@ -28,8 +29,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'index.ts'),
-      fileName: 'js/vue-ionicon.ts',
-      name: 'vue-ionicon',
+      fileName: 'ion-icon.ts',
+      name: 'ion-icon',
     },
     rollupOptions: {
       external: ['vue'],

@@ -5,13 +5,14 @@
   "author": "Jure Erznožnik",
   "scripts": {
     "serve": "vite",
-    "build": "vite build",
+    "build": "vite build && vue-tsc --emitDeclarationOnly && rm dist/*umd.js",
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
-  "main": "ion-icon.vue",
+  "main": "dist/ion-icon.vue",
+  "types": "dist/ion-icon.vue.d.ts",
   "files": [
-    "ion-icon.vue"
+    "dist/*"
   ],
   "keywords": [
     "vue ionicons",
@@ -30,6 +31,7 @@
     "vue": "^3.2.43"
   },
   "devDependencies": {
+    "@babel/types": "^7.20.7",
     "@types/dompurify": "^2.3.4",
     "@types/jest": "^29.2.5",
     "@vitejs/plugin-vue": "^3.2.0",
@@ -43,7 +45,8 @@
     "np": "^7.6.0",
     "typescript": "^4.7.4",
     "vite-plugin-eslint": "^1.8.1",
-    "vitest": "^0.25.1"
+    "vitest": "^0.25.1",
+    "vue-tsc": "^1.0.24"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +54,9 @@
       "velis",
       "@vue/eslint-config-typescript"
     ],
+    "parserOptions": {
+      "project": "./tsconfig.eslint.json"
+    },
     "rules": {
       "import/extensions": "off"
     }

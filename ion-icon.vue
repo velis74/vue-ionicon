@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loaded_svg" :key="loaded_svg" class="ionicon-wrapper" v-html="loaded_svg"/>
+  <div v-if="loaded_svg" :key="loaded_svg_key" class="ionicon-wrapper" v-html="loaded_svg"/>
 </template>
 
 <script lang="ts">
@@ -38,6 +38,9 @@ export default /* #__PURE__ */ defineComponent({
   computed: {
     repo_url() {
       return `https://unpkg.com/ionicons@5.5.1/dist/svg/${this.name}.svg`;
+    },
+    loaded_svg_key(): string {
+      return (this.loaded_svg as IconGetResponse)?.then ? 'loading' : this.loaded_svg as string;
     },
   },
   watch: {
