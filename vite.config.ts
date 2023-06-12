@@ -30,8 +30,8 @@ export default defineConfig({
     target: 'es2015',
     lib: {
       entry: resolve(__dirname, 'ion-icon.vue'),
-      formats: ['umd'],
-      fileName: 'ion-icon.ts',
+      formats: ['umd', 'es'],
+      fileName: 'ion-icon',
       name: 'ion-icon',
     },
     rollupOptions: {
