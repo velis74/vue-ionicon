@@ -9,8 +9,14 @@
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
-  "main": "dist/ion-icon.ts.umd.js",
+  "main": "dist/ion-icon.umd.js",
   "types": "dist/ion-icon.vue.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/ion-icon.umd.js",
+      "import": "./dist/ion-icon.mjs"
+    }
+  },
   "files": [
     "dist/*"
   ],
