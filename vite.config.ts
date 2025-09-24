@@ -24,7 +24,7 @@ export default defineConfig({
       rollupTypes: true,
     }),
     visualizer({
-      open: false,
+      open: true,
       filename: 'coverage/stats.html',
       gzipSize: true,
       brotliSize: true,
