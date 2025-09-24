@@ -1,6 +1,6 @@
 {
   "name": "vue-cached-icon",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Caching asynchronous icons loader for Vue",
   "author": "Jure Erznožnik",
   "type": "module",
@@ -10,12 +10,12 @@
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
-  "main": "dist/vue-cached-icon.umd.js",
+  "main": "dist/vue-cached-icon.umd.cjs",
   "types": "dist/vue-cached-icon.vue.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/vue-cached-icon.umd.js",
-      "import": "./dist/vue-cached-icon.mjs"
+      "require": "./dist/vue-cached-icon.umd.cjs",
+      "import": "./dist/vue-cached-icon.js"
     }
   },
   "files": [
