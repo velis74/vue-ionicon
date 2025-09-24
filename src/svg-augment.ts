@@ -1,0 +1,24 @@
+import DOMPurify from 'isomorphic-dompurify';
+
+DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+  if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href')?.match(/^#/)) {
+    node.remove();
+  }
+  if (node.hasAttribute('href') && !node.getAttribute('href')?.match(/^#/)) {
+    node.remove();
+  }
+});
+
+// eslint-disable-next-line import/prefer-default-export
+export function augment(svg: string): string {
+  // remove the title attribute because it's messing with selenium getting element text (title is included)
+  // this makes getting button text much harder, especially because this icon is lazy-loading
+  let result = svg.replace(/<title>.*<\/title>/i, '');
+  if (!result.includes('currentColor')) {
+    // The provided icon doesn't specify its colours as currentColor. Let's try to assign them. Of course,
+    // this will have zero effect if the svg actually defines its colours otherwise, e.g. by specifying fill="black"
+    result = result.replace(/(<svg)(\s)(.*)/i, '$1 fill="currentColor" $3');
+  }
+  result = DOMPurify.sanitize(result, { USE_PROFILES: { svg: true }, ADD_TAGS: ['use'] });
+  return result;
+}

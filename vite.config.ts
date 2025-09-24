@@ -34,8 +34,8 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/cached-icon.vue'),
       formats: ['umd', 'es'],
-      fileName: 'ion-icon',
-      name: 'ion-icon',
+      fileName: 'vue-cached-icon',
+      name: 'vue-cached-icon',
     },
     rollupOptions: {
       external: ['vue', 'axios', 'isomorphic-dompurify'],

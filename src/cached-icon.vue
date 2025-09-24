@@ -1,98 +1,66 @@
 <template>
-  <div v-if="loaded_svg" :key="loaded_svg_key" class="ionicon-wrapper" v-html="loaded_svg"/>
+  <div v-if="loadedSvg" :key="loadedSvgKey" class="cached-icon-wrapper" v-html="loadedSvg"/>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import axios from 'axios';
-import DOMPurify from 'isomorphic-dompurify';
-import { defineComponent } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { globalCache, IconDefOrPromise, IconGetResponse, ResolvedIconGetResponse } from './cache';
+import { augment } from './svg-augment';
 
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href')?.match(/^#/)) {
-    node.remove();
+const props = defineProps<{ name?: string }>();
+const emit = defineEmits<{ (e: 'icon-loaded', name: string): void; }>();
+
+const loadedSvg = ref('' as IconDefOrPromise);
+const repoUrl = computed(() => `https://unpkg.com/ionicons@5.5.1/dist/svg/${props.name}.svg`);
+const loadedSvgKey = computed(
+  () => ((loadedSvg.value as IconGetResponse)?.then ? 'loading' : loadedSvg.value as string),
+);
+
+const getCache = () => globalCache.get(props.name as string);
+const setCache = (value: IconDefOrPromise) => {
+  globalCache.set(props.name as string, value);
+  return value;
+};
+const setLoadedSVG = (svg: IconDefOrPromise) => {
+  loadedSvg.value = svg;
+  emit('icon-loaded', props.name as string);
+};
+const loadSVG = async () => {
+  const name = props.name;
+
+  if (!name) return; // Name is not defined, so don't render anything
+  const cache = getCache();
+  loadedSvg.value = '&hellip;'; // ellipsis while we're loading
+  if (cache) {
+    // icon is already in cache or at least there's a promise there
+    if (typeof (cache as IconGetResponse).then === 'function') {
+      // there's a promise there
+      try {
+        const res = await cache as ResolvedIconGetResponse;
+        setLoadedSVG(augment(res.data));
+      } catch { console.error('Failed waiting for an existing axios request to finish'); }
+    } else {
+      setLoadedSVG(cache as string); // icon is already in cache
+    }
+  } else if (name.toLowerCase().includes('<svg')) {
+    setLoadedSVG(augment(name));
+  } else {
+    // if icon name contains a '/' character, we assume it's a local resource, otherwise an ion icon
+    const url = name.indexOf('/') > -1 ? name : repoUrl.value;
+    try {
+      // first we set cache to axios promise
+      const res1 = await setCache(axios.get(url)) as ResolvedIconGetResponse;
+      setLoadedSVG(setCache(augment(res1.data))); // then to sanitized svg
+    } catch (err: any) {
+      console.error(`Failed loading CachedIcon. Wrong icon name or URL? (${url})`);
+      console.log(err);
+    }
   }
-  if (node.hasAttribute('href') && !node.getAttribute('href')?.match(/^#/)) {
-    node.remove();
-  }
-});
+};
 
-export default /* #__PURE__ */ defineComponent({
-  name: 'IonIcon',
-  props: { name: { type: String, required: false, default: null } },
-  emits: ['icon-loaded'],
-  data() {
-    return { loaded_svg: '' as IconDefOrPromise };
-  },
-  computed: {
-    repo_url() {
-      return `https://unpkg.com/ionicons@5.5.1/dist/svg/${this.name}.svg`;
-    },
-    loaded_svg_key(): string {
-      return (this.loaded_svg as IconGetResponse)?.then ? 'loading' : this.loaded_svg as string;
-    },
-  },
-  watch: {
-    name() {
-      this.loaded_svg = '';
-      this.loadSVG();
-    },
-  },
-  mounted() {
-    this.loadSVG();
-  },
-  methods: {
-    getCache() { return globalCache.get(this.name); },
-    setCache(value: IconDefOrPromise) {
-      globalCache.set(this.name, value);
-      return value;
-    },
-    sanitize(svg: string): string {
-      // remove the title attribute because it's messing with selenium getting element text (title is included)
-      // this makes getting button text much harder, especially because this icon is lazy-loading
-      let result = svg.replace(/<title>.*<\/title>/i, '');
-      if (!result.includes('currentColor')) {
-        // The provided icon doesn't specify its colours as currentColor. Let's try to assign them. Of course,
-        // this will have zero effect if the svg actually defines its colours otherwise, e.g. by specifying fill="black"
-        result = result.replace(/(<svg)(\s)(.*)/i, '$1 fill="currentColor" $3');
-      }
-      result = DOMPurify.sanitize(result, { USE_PROFILES: { svg: true }, ADD_TAGS: ['use'] });
-      return result;
-    },
-    setLoadedSVG(svg: IconDefOrPromise) {
-      this.loaded_svg = svg;
-      this.$emit('icon-loaded', true);
-    },
-    async loadSVG() {
-      const name = this.name;
+watch(() => props.name, () => { loadedSvg.value = ''; loadSVG(); });
 
-      if (!name) return; // Name is not defined, so don't render anything
-      const cache = this.getCache();
-      this.loaded_svg = '&hellip;'; // ellipsis while we're loading
-      if (cache) {
-        // icon is already in cache or at least there's a promise there
-        if (typeof (cache as IconGetResponse).then === 'function') {
-          // there's a promise there
-          try {
-            const res = await cache as ResolvedIconGetResponse;
-            this.setLoadedSVG(this.sanitize(res.data));
-          } catch { console.error('Failed waiting for an existing axios request to finish'); }
-        } else {
-          this.setLoadedSVG(cache as string); // icon is already in cache
-        }
-      } else if (name.toLowerCase().includes('<svg')) {
-        this.setLoadedSVG(this.sanitize(name));
-      } else {
-        // if icon name contains a '/' character, we assume it's a local resource, otherwise an ion icon
-        const url = name.indexOf('/') > -1 ? name : this.repo_url;
-        try {
-          // first we set cache to axios promise
-          const res1 = await this.setCache(axios.get(url)) as ResolvedIconGetResponse;
-          this.setLoadedSVG(this.setCache(this.sanitize(res1.data))); // then to sanitized svg
-        } catch { console.error('Failed loading CachedIcon. Wrong icon name or URL?'); }
-      }
-    },
-  },
-});
+loadSVG();
 </script>

@@ -19,15 +19,15 @@
       </small>
     </p>
     <div style="color: blue">
-      <IonIcon :name="icon"/>
+      <cached-icon :name="icon"/>
       Icon should be blue here
     </div>
     <div style="color: red">
-      <IonIcon :name="icon"/>
+      <cached-icon :name="icon"/>
       Icon should be red here
     </div>
     <div style="color: darkgreen">
-      <IonIcon :name="icon"/>
+      <cached-icon :name="icon"/>
       Icon should be green here
     </div>
     <p>
@@ -39,26 +39,20 @@
     </p>
     <p>
       Icon, loaded from a custom url.<br>
-      <IonIcon class="bigger" name="https://www.velis.si/assets/logo_text.BI41GGsF.svg"/>
+      <cached-icon class="bigger" name="/api/svg/logo_text.BI41GGsF.svg"/>
     </p>
     <p>
       And finally, one with literal svg <small>(and with a crude, brute-force animation too)</small><br>
-      <IonIcon class="bigger" :name="literalSvgAnimated"/>
+      <cached-icon class="bigger" :name="literalSvgAnimated"/>
     </p>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue';
-
+<script setup lang="ts">
 import CachedIcon from '../src/cached-icon.vue';
+import { computed, onMounted, ref } from 'vue';
 
-export default defineComponent({
-  name: 'DemoApp',
-  components: { IonIcon: CachedIcon },
-  data() {
-    return {
-      icon: 'warning',
-      literalSvg: `
+const icon = ref('warning');
+const literalSvg = `
 <svg height="510" width="298" xmlns="http://www.w3.org/2000/svg" viewBox="0 -15 298 510">
   <defs>
     <symbol id="peco">
@@ -95,34 +89,31 @@ export default defineComponent({
     <use href="#peco" x="132"/>
   </g>
 </svg>
-      `,
-      literalSvgOffset: 0,
-    };
-  },
-  computed: {
-    literalSvgAnimated() {
-      return this.literalSvg
-        .replace(/\$y1/g, String(this.literalSvgOffset))
-        .replace(/\$y2/g, String(187 - this.literalSvgOffset));
-    },
-  },
-  mounted() {
-    window.setInterval(() => { this.literalSvgOffset = (this.literalSvgOffset + 3) % 187; }, 10);
-  },
+`;
+const literalSvgOffset = ref(0);
+
+const literalSvgAnimated = computed(() => literalSvg
+        .replace(/\$y1/g, String(literalSvgOffset.value))
+        .replace(/\$y2/g, String(187 - literalSvgOffset.value))
+);
+
+onMounted(() => {
+  window.setInterval(() => { literalSvgOffset.value = (literalSvgOffset.value + 3) % 187; }, 10);
 });
 </script>
+
 <style>
-.ionicon-wrapper {
+.cached-icon-wrapper {
   display: inline-block;
   height:  1.5em;
 }
 
-.ionicon-wrapper > svg {
+.cached-icon-wrapper > svg {
   display: inline-block;
   height:  1.5em;
 }
 
-.ionicon-wrapper.bigger > svg {
+.cached-icon-wrapper.bigger > svg {
   height: 5em;
 }
 </style>

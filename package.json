@@ -1,7 +1,7 @@
 {
-  "name": "vue-ionicon",
+  "name": "vue-cached-icon",
   "version": "2.1.1",
-  "description": "Caching asynchronous IonIcons loader for Vue",
+  "description": "Caching asynchronous icons loader for Vue",
   "author": "Jure Erznožnik",
   "scripts": {
     "dev": "npm run dev --workspace=demo",
@@ -9,12 +9,12 @@
     "test": "vitest run --coverage",
     "lint": "eslint ."
   },
-  "main": "dist/ion-icon.umd.js",
-  "types": "dist/ion-icon.vue.d.ts",
+  "main": "dist/vue-cached-icon.umd.js",
+  "types": "dist/vue-cached-icon.vue.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/ion-icon.umd.js",
-      "import": "./dist/ion-icon.mjs"
+      "require": "./dist/vue-cached-icon.umd.js",
+      "import": "./dist/vue-cached-icon.mjs"
     }
   },
   "files": [
@@ -29,7 +29,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "git@github.com:velis74/vue-ionicon.git"
+    "url": "git@github.com:velis74/vue-cached-icon.git"
   },
   "peerDependencies": {
     "axios": "^1.1.3",

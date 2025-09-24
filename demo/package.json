@@ -1,8 +1,9 @@
 {
-  "name": "vue-ionicon-demo",
+  "name": "vue-cached-icon-demo",
   "private": true,
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build"
   },
   "dependencies": {
     "vue": "^3.2.43"
@@ -12,9 +13,6 @@
     "vite": "^5"
   },
   "eslintConfig": {
-    "parserOptions": {
-      "project": "../tsconfig.eslint.json"
-    },
     "rules": {
       "import/no-relative-packages": "off"
     }

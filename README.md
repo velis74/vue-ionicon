@@ -1,10 +1,10 @@
-# vue-ionicon
+# vue-cached-icon
 
 Caching icon loader with an emphasis for loading the Ionicons directly from the CDN.
 
 ## Demo
 
-https://www.velis.si/ion-icon/
+https://www.velis.si/vue-cached-icon/
 
 ## Features
 
@@ -16,7 +16,7 @@ https://www.velis.si/ion-icon/
 ## Installing
 
 ```bash
-npm install --save vue-ionicon
+npm install --save vue-cached-icon
 ```
 
 ## Using
@@ -38,7 +38,7 @@ npm install --save vue-ionicon
 
 ```javascript
 <script>
-  import IonIcon from 'vue-ionicon';
+  import IonIcon from 'vue-cached-icon';
 
   export default {
     name: 'myAwesomeComponent',

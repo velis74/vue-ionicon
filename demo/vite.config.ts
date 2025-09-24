@@ -24,6 +24,11 @@ export default defineConfig({
         target: 'http://localhost:8000',
         secure: true,
       },
+      '/api/svg': {
+        target: 'https://www.velis.si',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/svg/, '/assets')
+      }
     },
   },
 });
