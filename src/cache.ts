@@ -9,9 +9,21 @@ class Cache {
     this.cache = {};
   }
 
-  get(key: string) { return this.cache[key]; }
+  check(key: string) {
+    const res = this.cache[key];
+    return !!res;
+  }
 
-  set(key: string, value: IconDefOrPromise) { this.cache[key] = value; }
+  async get(key: string) {
+    const res = this.cache[key];
+    if (!res || typeof res === 'string') return res; // undefined & already loaded resource
+
+    return (await res).data;
+  }
+
+  set(key: string, value: IconDefOrPromise) {
+    this.cache[key] = value;
+  }
 
   clear() {
     for (const prop of Object.getOwnPropertyNames(this.cache)) {

@@ -10,7 +10,8 @@ import eslint from 'vite-plugin-eslint';
 export default defineConfig({
   plugins: [
     vue({ template: { compilerOptions: { compatConfig: { MODE: 2 } } } }),
-    { // do not fail on serve (i.e. local development)
+    {
+      // do not fail on serve (i.e. local development)
       ...eslint({
         failOnWarning: false,
         failOnError: false,
@@ -32,7 +33,7 @@ export default defineConfig({
   build: {
     target: 'es2015',
     lib: {
-      entry: resolve(__dirname, 'src/cached-icon.vue'),
+      entry: resolve(__dirname, 'src/index.ts'),
       formats: ['umd', 'es'],
       fileName: 'vue-cached-icon',
       name: 'vue-cached-icon',

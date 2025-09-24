@@ -9,7 +9,6 @@ DOMPurify.addHook('afterSanitizeAttributes', (node) => {
   }
 });
 
-// eslint-disable-next-line import/prefer-default-export
 export function augment(svg: string): string {
   // remove the title attribute because it's messing with selenium getting element text (title is included)
   // this makes getting button text much harder, especially because this icon is lazy-loading

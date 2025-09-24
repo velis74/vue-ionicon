@@ -1,57 +1,54 @@
 <template>
   <div>
-    <p>
-      This small demo shows how the component works
-    </p>
+    <p>This small demo shows how the component works</p>
     <p>
       <label for="#icon-selector">Icon to load:</label>
       <select id="icon-selector" v-model="icon">
-        <option selected>warning</option>
-        <option>chatbox-ellipses-outline</option>
-        <option>cog-outline</option>
-        <option>construct-outline</option>
-        <option>desktop-outline</option>
-        <option>pulse-outline</option>
+        <option>mdi-airplane</option>
+        <option>fa-house</option>
+        <option selected>ion-warning</option>
+        <option>ion-chatbox-ellipses-outline</option>
+        <option>ion-cog-outline</option>
+        <option>ion-construct-outline</option>
+        <option>ion-desktop-outline</option>
+        <option>ion-pulse-outline</option>
       </select>
-      <br>
-      <small>
-        (just a few, for example)
-      </small>
+      <br />
+      <small> (just a few, for example) </small>
     </p>
     <div style="color: blue">
-      <cached-icon :name="icon"/>
+      <cached-icon :name="icon" />
       Icon should be blue here
     </div>
     <div style="color: red">
-      <cached-icon :name="icon"/>
+      <cached-icon :name="icon" />
       Icon should be red here
     </div>
     <div style="color: darkgreen">
-      <cached-icon :name="icon"/>
+      <cached-icon :name="icon" />
       Icon should be green here
     </div>
-    <p>
-      &hellip;
-    </p>
+    <p>&hellip;</p>
     <p>
       Also note how - since all three icons above are the same - there's only one request to the icon repository for
       all.
     </p>
     <p>
-      Icon, loaded from a custom url.<br>
-      <cached-icon class="bigger" name="/api/svg/logo_text.BI41GGsF.svg"/>
+      Icon, loaded from a custom url.<br />
+      <cached-icon class="bigger" name="/api/svg/logo_text.BI41GGsF.svg" />
     </p>
     <p>
-      And finally, one with literal svg <small>(and with a crude, brute-force animation too)</small><br>
-      <cached-icon class="bigger" :name="literalSvgAnimated"/>
+      And finally, one with literal svg <small>(and with a crude, brute-force animation too)</small><br />
+      <cached-icon class="bigger" :name="literalSvgAnimated" />
     </p>
   </div>
 </template>
 <script setup lang="ts">
-import CachedIcon from '../src/cached-icon.vue';
 import { computed, onMounted, ref } from 'vue';
 
-const icon = ref('warning');
+import CachedIcon from '../src/cached-icon.vue';
+
+const icon = ref('fa-house');
 const literalSvg = `
 <svg height="510" width="298" xmlns="http://www.w3.org/2000/svg" viewBox="0 -15 298 510">
   <defs>
@@ -92,25 +89,26 @@ const literalSvg = `
 `;
 const literalSvgOffset = ref(0);
 
-const literalSvgAnimated = computed(() => literalSvg
-        .replace(/\$y1/g, String(literalSvgOffset.value))
-        .replace(/\$y2/g, String(187 - literalSvgOffset.value))
+const literalSvgAnimated = computed(() =>
+  literalSvg.replace(/\$y1/g, String(literalSvgOffset.value)).replace(/\$y2/g, String(187 - literalSvgOffset.value)),
 );
 
 onMounted(() => {
-  window.setInterval(() => { literalSvgOffset.value = (literalSvgOffset.value + 3) % 187; }, 10);
+  window.setInterval(() => {
+    literalSvgOffset.value = (literalSvgOffset.value + 3) % 187;
+  }, 10);
 });
 </script>
 
 <style>
 .cached-icon-wrapper {
   display: inline-block;
-  height:  1.5em;
+  height: 1.5em;
 }
 
 .cached-icon-wrapper > svg {
   display: inline-block;
-  height:  1.5em;
+  height: 1.5em;
 }
 
 .cached-icon-wrapper.bigger > svg {

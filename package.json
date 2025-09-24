@@ -1,8 +1,9 @@
 {
   "name": "vue-cached-icon",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Caching asynchronous icons loader for Vue",
   "author": "Jure Erznožnik",
+  "type": "module",
   "scripts": {
     "dev": "npm run dev --workspace=demo",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
@@ -37,12 +38,12 @@
     "vue": "^3.2.43"
   },
   "devDependencies": {
-    "@types/node": "^22.14.1",
+    "@types/node": "^24.5.2",
     "@vitejs/plugin-vue": "^5",
     "@vitest/coverage-v8": "^3",
     "@vue/test-utils": "^2.2.4",
     "@vue/tsconfig": "^0.8.1",
-    "eslint-config-velis": "^1.1.16",
+    "eslint-config-velis": "^2.0.9",
     "jsdom": "^26",
     "rollup-plugin-visualizer": "^5.14.0",
     "typescript": "^5",
@@ -51,13 +52,5 @@
     "vite-plugin-eslint": "^1.8.1",
     "vitest": "^3",
     "vue-tsc": "^2"
-  },
-  "eslintConfig": {
-    "extends": [
-      "velis"
-    ],
-    "parserOptions": {
-      "project": "./tsconfig.eslint.json"
-    }
   }
 }

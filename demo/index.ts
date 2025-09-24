@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
 
-import DemoApp from './index.vue';
+import CachedIconDemoApp from './cached-icon-demo.vue';
 
-const app = createApp(DemoApp);
+const app = createApp(CachedIconDemoApp);
 
 app.mount('body');
