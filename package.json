@@ -1,6 +1,6 @@
 {
   "name": "vue-cached-icon",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Caching asynchronous icons loader for Vue",
   "author": "Jure Erznožnik",
   "type": "module",
