@@ -39,7 +39,7 @@
     </p>
     <p>
       Icon, loaded from a custom url.<br>
-      <IonIcon class="bigger" name="https://www.velis.si/static/images/logo_icon.svg"/>
+      <IonIcon class="bigger" name="https://www.velis.si/assets/logo_text.BI41GGsF.svg"/>
     </p>
     <p>
       And finally, one with literal svg <small>(and with a crude, brute-force animation too)</small><br>
@@ -50,11 +50,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
-import IonIcon from './ion-icon.vue';
+import CachedIcon from '../src/cached-icon.vue';
 
 export default defineComponent({
   name: 'DemoApp',
-  components: { IonIcon },
+  components: { IonIcon: CachedIcon },
   data() {
     return {
       icon: 'warning',

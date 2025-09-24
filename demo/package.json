@@ -1,0 +1,22 @@
+{
+  "name": "vue-ionicon-demo",
+  "private": true,
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "vue": "^3.2.43"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5",
+    "vite": "^5"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "project": "../tsconfig.eslint.json"
+    },
+    "rules": {
+      "import/no-relative-packages": "off"
+    }
+  }
+}

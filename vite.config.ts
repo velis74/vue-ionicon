@@ -2,7 +2,9 @@
 import { resolve } from 'path';
 
 import vue from '@vitejs/plugin-vue';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 import eslint from 'vite-plugin-eslint';
 
 export default defineConfig({
@@ -16,31 +18,36 @@ export default defineConfig({
       apply: 'serve',
       enforce: 'post',
     },
+    dts({
+      tsconfigPath: './tsconfig.build.json',
+      rollupTypes: true,
+    }),
+    visualizer({
+      open: false,
+      filename: 'coverage/stats.html',
+      gzipSize: true,
+      brotliSize: true,
+    }),
   ],
-  server: {
-    port: 8080,
-    proxy: {
-      '.*': {
-        target: 'http://localhost:8000',
-        secure: true,
-      },
-    },
-  },
   build: {
     target: 'es2015',
     lib: {
-      entry: resolve(__dirname, 'ion-icon.vue'),
+      entry: resolve(__dirname, 'src/cached-icon.vue'),
       formats: ['umd', 'es'],
       fileName: 'ion-icon',
       name: 'ion-icon',
     },
     rollupOptions: {
       external: ['vue', 'axios', 'isomorphic-dompurify'],
-      output: { globals: { vue: 'Vue', axios: 'axios', 'isomorphic-dompurify': 'isomorphic-dompurify' } },
+      output: {
+        globals: (id: string) => id, // all external modules are currently not aliased to anything but their own names
+      },
     },
   },
   test: {
     globals: true,
     environment: 'jsdom',
+    include: ['./src/**/*.spec.*'],
+    coverage: { provider: 'v8', exclude: ['dist', 'vite.config.ts', 'demo/**/*'] },
   },
 });

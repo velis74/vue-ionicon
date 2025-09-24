@@ -7,7 +7,7 @@ import axios from 'axios';
 import DOMPurify from 'isomorphic-dompurify';
 import { defineComponent } from 'vue';
 
-import ionIconCache, { IconDefOrPromise, IconGetResponse, ResolvedIconGetResponse } from './ion-icon-cache';
+import { globalCache, IconDefOrPromise, IconGetResponse, ResolvedIconGetResponse } from './cache';
 
 DOMPurify.addHook('afterSanitizeAttributes', (node) => {
   if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href')?.match(/^#/)) {
@@ -43,9 +43,9 @@ export default /* #__PURE__ */ defineComponent({
     this.loadSVG();
   },
   methods: {
-    getCache() { return ionIconCache.get(this.name); },
+    getCache() { return globalCache.get(this.name); },
     setCache(value: IconDefOrPromise) {
-      ionIconCache.set(this.name, value);
+      globalCache.set(this.name, value);
       return value;
     },
     sanitize(svg: string): string {
@@ -90,7 +90,7 @@ export default /* #__PURE__ */ defineComponent({
           // first we set cache to axios promise
           const res1 = await this.setCache(axios.get(url)) as ResolvedIconGetResponse;
           this.setLoadedSVG(this.setCache(this.sanitize(res1.data))); // then to sanitized svg
-        } catch { console.error('Failed loading IonIcon. Wrong icon name or URL?'); }
+        } catch { console.error('Failed loading CachedIcon. Wrong icon name or URL?'); }
       }
     },
   },

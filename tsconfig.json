@@ -2,8 +2,11 @@
   "extends": "./node_modules/eslint-config-velis/tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["vitest/globals"],
+    "module": "es2015",
+    "moduleResolution": "bundler"
   },
-  "include": ["ion-icon.vue"],
-  "exclude": ["dist", "coverage"]
+  "include": ["src/**/*"],
+  "exclude": ["dist", "coverage", "node_modules"]
 }

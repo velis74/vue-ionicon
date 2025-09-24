@@ -2,7 +2,7 @@ export type ResolvedIconGetResponse = { data: string };
 export type IconGetResponse = Promise<{ data: string }>;
 export type IconDefOrPromise = string | IconGetResponse;
 
-class IonIconCache {
+class Cache {
   private cache: { [key: string]: IconDefOrPromise };
 
   constructor() {
@@ -20,4 +20,4 @@ class IonIconCache {
   }
 }
 
-export default new IonIconCache();
+export const globalCache = new Cache();
