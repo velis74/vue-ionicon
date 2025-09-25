@@ -1,15 +1,21 @@
 import DOMPurify from 'isomorphic-dompurify';
 
-DOMPurify.addHook('afterSanitizeAttributes', (node) => {
-  if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href')?.match(/^#/)) {
-    node.remove();
-  }
-  if (node.hasAttribute('href') && !node.getAttribute('href')?.match(/^#/)) {
-    node.remove();
-  }
-});
+let hookRegistered = false;
 
 export function augment(svg: string): string {
+  if (!hookRegistered) {
+    // We need to register the hook here, otherwise we mess up SSR
+    DOMPurify.addHook('afterSanitizeAttributes', (node) => {
+      if (node.hasAttribute('xlink:href') && !node.getAttribute('xlink:href')?.match(/^#/)) {
+        node.remove();
+      }
+      if (node.hasAttribute('href') && !node.getAttribute('href')?.match(/^#/)) {
+        node.remove();
+      }
+    });
+    hookRegistered = true;
+  }
+
   // remove the title attribute because it's messing with selenium getting element text (title is included)
   // this makes getting button text much harder, especially because this icon is lazy-loading
   let result = svg.replace(/<title>.*<\/title>/i, '');
